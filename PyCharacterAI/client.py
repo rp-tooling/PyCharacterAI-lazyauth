@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional
 from . import methods
 
 from .requester import Requester
+import uuid
 
 
 class BaseClient:
@@ -77,6 +78,13 @@ class AsyncClient(BaseClient):
             self.set_web_next_auth(web_next_auth)
 
         self.set_account_id(str((await self.account.fetch_me()).account_id))
+    async def authguest(self): # literally the entire thing lazy auth fork does
+        resp = await self.requester.request('https://plus.character.ai/chat/auth/lazy/', options={
+                "method": 'POST',
+                "body": payload,
+                "headers": {"Referrer":"https://plus.character.ai"}
+            })
+        await self.authenticate(resp.get("token"))
 
     async def close_session(self) -> None:
         await self.__requester.ws_close_async()
