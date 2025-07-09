@@ -76,7 +76,7 @@ class AsyncClient(BaseClient):
         web_next_auth: str = str(kwargs.get("web_next_auth", ""))
         if web_next_auth:
             self.set_web_next_auth(web_next_auth)
-
+        self._guest = kwargs.get("guest", False)
         self.set_account_id(str((await self.account.fetch_me()).account_id))
     async def authguest(self): # literally the entire thing lazy auth fork does
         resp = (await self.__requester.request_async('https://plus.character.ai/chat/auth/lazy/', options={
@@ -84,8 +84,7 @@ class AsyncClient(BaseClient):
                 "body": {"lazy_uuid":str(uuid.uuid4())},
                 "headers": {"Referrer":"https://plus.character.ai"}
             })).json()
-        self._guest = True
-        await self.authenticate(resp.get("token"))
+        await self.authenticate(resp.get("token"),guest=True)
 
     async def close_session(self) -> None:
         await self.__requester.ws_close_async()
