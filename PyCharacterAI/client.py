@@ -79,11 +79,11 @@ class AsyncClient(BaseClient):
 
         self.set_account_id(str((await self.account.fetch_me()).account_id))
     async def authguest(self): # literally the entire thing lazy auth fork does
-        resp = await self.__requester.request_async('https://plus.character.ai/chat/auth/lazy/', options={
+        resp = (await self.__requester.request_async('https://plus.character.ai/chat/auth/lazy/', options={
                 "method": 'POST',
                 "body": {"lazy_uuid":str(uuid.uuid4())},
                 "headers": {"Referrer":"https://plus.character.ai"}
-            })
+            })).json()
         await self.authenticate(resp.get("token"))
 
     async def close_session(self) -> None:
