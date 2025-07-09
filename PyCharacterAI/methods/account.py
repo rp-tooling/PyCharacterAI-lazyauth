@@ -22,6 +22,15 @@ class AccountMethods:
         self.__requester = requester
 
     async def fetch_me(self, **kwargs: Any) -> Account:
+        if self.__client._guest:
+            return Account(
+                {
+                    "username":"Guest",
+                    "name":"John Doe",
+                    "first_name":"John",
+                    "id":-5
+                }
+            )
         request = await self.__requester.request_async(
             url="https://plus.character.ai/chat/user/",
             options={"headers": self.__client.get_headers(kwargs.get("token", None))},
