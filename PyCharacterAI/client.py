@@ -81,7 +81,7 @@ class AsyncClient(BaseClient):
     async def authguest(self): # literally the entire thing lazy auth fork does
         resp = await self.requester.request('https://plus.character.ai/chat/auth/lazy/', options={
                 "method": 'POST',
-                "body": {"lazy_uuid":str(uuid.uuid4()),
+                "body": {"lazy_uuid":str(uuid.uuid4())},
                 "headers": {"Referrer":"https://plus.character.ai"}
             })
         await self.authenticate(resp.get("token"))
