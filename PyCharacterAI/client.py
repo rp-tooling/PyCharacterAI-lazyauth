@@ -84,6 +84,7 @@ class AsyncClient(BaseClient):
                 "body": {"lazy_uuid":str(uuid.uuid4())},
                 "headers": {"Referrer":"https://plus.character.ai"}
             })).json()
+        self._guest = True
         await self.authenticate(resp.get("token"))
 
     async def close_session(self) -> None:
